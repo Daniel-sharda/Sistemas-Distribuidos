@@ -16,10 +16,31 @@ public class WordVowelCounter implements Runnable {
     @Override
     public void run() {
         // TODO
+        String palabra;
+        int numero=0;
+        boolean flag=true;
+        try {
+            while(!wordQueue.isEmpty()) {
+                palabra=wordQueue.take();
+                numero=countVowels(palabra);
+                try {
+                    resultQueue.put(new Result(palabra, numero));
+                } catch (InterruptedException e) {}
+                flag=true;
+            }
+        } catch (InterruptedException e) {}
     }
 
     private int countVowels(String word) {
-        return -1;
+        int contador=0;
+        char letra;
+        for(int i=0; i<word.length(); i++) {
+            letra=Character.toLowerCase(word.charAt(i));
+            if(letra=='a' || letra=='e' || letra=='i' || letra=='o' || letra=='u') {
+                contador++;
+            }
+        }
+        return contador;
     }
 }
 

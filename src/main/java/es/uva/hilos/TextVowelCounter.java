@@ -11,8 +11,9 @@ public class TextVowelCounter {
 
     // Method that takes a String input and returns an ArrayList of words
     public static ArrayList<String> getWords(String input) {
-        // TODO
-        return null;
+        ArrayList<String> palabras = new ArrayList<>(Arrays.asList(input.split(" ")));
+
+        return palabras;
     }
 
     // Method that counts vowels in a string using parallelism
@@ -22,6 +23,10 @@ public class TextVowelCounter {
         BlockingQueue<String> wordQueue = new LinkedBlockingQueue<>();
         BlockingQueue<Result> resultQueue = new LinkedBlockingQueue<>();
 
+        ArrayList<String> palabras = getWords(input);
+        for(String palabra : palabras) {
+            wordQueue.put(palabra);
+        }
 
         // Create and start the worker threads based on the parallelism parameter
         List<Thread> workers = new ArrayList<>();
@@ -39,6 +44,10 @@ public class TextVowelCounter {
 
         // Gather results from resultQueue
         // TODO
-        return -1;
+        int total=0;
+        for(Result resultado : resultQueue) {
+            total+=resultado.getVowelCount();
+        }
+        return total;
     }
 }
