@@ -2,20 +2,24 @@ package es.uva.sockets;
 
 import java.util.ArrayList;
 
+import java.util.Random;
+
 public class Estado {
     public final ArrayList<Jugador> jugadores;
-    public Coordenadas tesoro;
+    public Coordenadas tesoro = null;
     public final ArrayList<Coordenadas> buscadas;
     private final int size;
     private boolean terminado;
 
-    public Estado(int size) {
+    public Estado(int size, boolean Servidor) {
         this.size = size;
         terminado = false;
         this.jugadores = new ArrayList<>();
         this.buscadas = new ArrayList<>();
         // TODO: Coordenadas aleatorias para el tesoro
-        this.tesoro = new Coordenadas(0, 0);
+        if (Servidor) {
+            this.tesoro = getCoordenadasNuevas();
+        }
     }
 
     // Los métodos que modifican el estado son synchronized,
@@ -39,10 +43,20 @@ public class Estado {
     public synchronized void buscar(int id) {
         // TODO busca el tesoro el jugador con este id
         // Si se encuentra finaliza el juego
+        if (tesoro == null) {
+            buscadas.add(jugadores.get(id).getCoordenadas());
+        } else {
+            if(tesoro.equals(jugadores.get(id).getCoordenadas())) {
+                terminar();
+            }
+            buscadas.add(jugadores.get(id).getCoordenadas());
+        }
+
     }
 
     public synchronized void mover(int id, Direccion dir) {
         // TODO mueve a el jugador id en la direccion dir
+        jugadores.get(id).mover(dir);
     }
 
     public void mostrar() {
@@ -82,5 +96,27 @@ public class Estado {
             }
             System.out.println("-");
         }
+    }
+
+    public Coordenadas getCoordenadasNuevas() {
+        Random rand = new Random();
+        if(jugadores.size() == size*size) {
+            return null;
+        }
+        int[] nuevasCoord = new int[2];
+        boolean condicion;
+        do{
+            condicion = false;
+            nuevasCoord[0] = rand.nextInt(size);
+            nuevasCoord[1] = rand.nextInt(size);
+            for(Jugador jugador : jugadores) {
+                if(nuevasCoord[0]==jugador.coordenadas.getX() && nuevasCoord[1]==jugador.coordenadas.getY()) {
+                    condicion = true;
+                    break;
+                }
+            }
+        }while(condicion);
+
+        return new Coordenadas(nuevasCoord[0], nuevasCoord[1]);
     }
 }

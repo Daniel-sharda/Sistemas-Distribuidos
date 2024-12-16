@@ -12,4 +12,16 @@ public class Jugador {
     public char getChar(){
         return (char) ('A' + (id - 1) % 26);
     }
+
+    public String coordenadasJugador() {
+        return id + " " + coordenadas.getX() + " " + coordenadas.getY();
+    }
+
+    public void mover(Direccion dir) {
+        this.coordenadas=this.coordenadas.mover(dir);
+    }
+
+    public Coordenadas getCoordenadas() {
+        return coordenadas;
+    }
 }

@@ -72,7 +72,8 @@ public class AppTest {
             "A, 0, 1",
             "D, 2, 1",
     })
-    public void shouldMove(String key, int x, int y) throws Exception {
+//    public void shouldMove(String key, int x, int y) throws Exception {
+    public void shouldMove(char key, int x, int y) throws Exception {
         System.setProperty("junit.jupiter.execution.parallel.enabled", "false");
         ClienteJuego clienteJuego1 = new ClienteJuego(3);
         clienteJuego1.conectar("localhost", puerto);
@@ -92,8 +93,8 @@ public class AppTest {
         clienteJuego2.procesarMensajeServidor(); // Añade al jugador nuevo
         clienteJuego1.procesarMensajeServidor(); // Añade al jugador nuevo
 
-        System.setIn(new ByteArrayInputStream(key.getBytes()));
-        clienteJuego1.procesarInput();
+//        System.setIn(new ByteArrayInputStream(key.getBytes()));
+        clienteJuego1.procesarInput(key);
         managerCliente.procesarMensajeCliente();
         clienteJuego1.procesarMensajeServidor();
         // El otro cliente tambien recibe la actualizacion de movimiento
@@ -123,10 +124,11 @@ public class AppTest {
         servidorJuego.aceptarConexion();
         clienteJuego2.procesarMensajeServidor(); // Añade al jugador existente
         clienteJuego2.procesarMensajeServidor(); // Añade al jugador nuevo
+        System.out.println(clienteJuego1.estado.jugadores.size());
         clienteJuego1.procesarMensajeServidor(); // Añade al jugador nuevo
 
-        System.setIn(new ByteArrayInputStream("Q".getBytes()));
-        clienteJuego1.procesarInput();
+        System.setIn(new ByteArrayInputStream("Q\n".getBytes()));
+        clienteJuego1.procesarInput('Q');
         managerCliente.procesarMensajeCliente();
         clienteJuego1.procesarMensajeServidor();
         // El otro cliente tambien recibe la actualizacion de buscados
@@ -162,7 +164,7 @@ public class AppTest {
         clienteJuego1.procesarMensajeServidor(); // Añade al jugador nuevo
 
         System.setIn(new ByteArrayInputStream("Q".getBytes()));
-        clienteJuego1.procesarInput();
+        clienteJuego1.procesarInput('Q');
         managerCliente.procesarMensajeCliente();
         clienteJuego1.procesarMensajeServidor();
         // El otro cliente tambien recibe la actualizacion de buscados
